@@ -56,8 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UI\Controls\OutlinedTextBlock.cs" />
     <Compile Include="UI\Framework\RelayCommand.cs" />
     <Compile Include="UI\Framework\SimpleCommand.cs" />
+    <Compile Include="UI\Main\BrushViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

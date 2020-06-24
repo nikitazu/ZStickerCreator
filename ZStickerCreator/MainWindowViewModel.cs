@@ -1,12 +1,16 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ZStickerCreator.UI.Framework;
+using ZStickerCreator.UI.Main;
 
 namespace ZStickerCreator
 {
@@ -17,12 +21,16 @@ namespace ZStickerCreator
         private static class PropArgs
         {
             public static readonly PropertyChangedEventArgs Text = new PropertyChangedEventArgs(nameof(Text));
+            public static readonly PropertyChangedEventArgs TextFillList = new PropertyChangedEventArgs(nameof(TextFillList));
+            public static readonly PropertyChangedEventArgs SelectedTextFill = new PropertyChangedEventArgs(nameof(SelectedTextFill));
         }
 
         // Fields
         //
 
-        private string _text= "Всё Ацтой!";
+        private string _text;
+        private List<BrushViewModel> _textFillList;
+        private BrushViewModel _selectedTextFill;
 
         // Properties
         //
@@ -34,6 +42,26 @@ namespace ZStickerCreator
             {
                 _text = value;
                 PropertyChanged?.Invoke(this, PropArgs.Text);
+            }
+        }
+
+        public List<BrushViewModel> TextFillList
+        {
+            get => _textFillList;
+            set
+            {
+                _textFillList = value;
+                PropertyChanged?.Invoke(this, PropArgs.TextFillList);
+            }
+        }
+
+        public BrushViewModel SelectedTextFill
+        {
+            get => _selectedTextFill;
+            set
+            {
+                _selectedTextFill = value;
+                PropertyChanged?.Invoke(this, PropArgs.SelectedTextFill);
             }
         }
 
@@ -50,6 +78,47 @@ namespace ZStickerCreator
 
         public MainWindowViewModel()
         {
+            Text = "Всё Ацтой!";
+            TextFillList = new List<BrushViewModel>
+            {
+                new BrushViewModel
+                {
+                    BrushValue = Brushes.White,
+                    Title = "White",
+                },
+                new BrushViewModel
+                {
+                    BrushValue = Brushes.Red,
+                    Title = "Red",
+                },
+                new BrushViewModel
+                {
+                    BrushValue = Brushes.Orange,
+                    Title = "Orange",
+                },
+                new BrushViewModel
+                {
+                    BrushValue = Brushes.Green,
+                    Title = "Green",
+                },
+                new BrushViewModel
+                {
+                    BrushValue = Brushes.Olive,
+                    Title = "Olive",
+                },
+                new BrushViewModel
+                {
+                    BrushValue = Brushes.Cyan,
+                    Title = "Cyan",
+                },
+                new BrushViewModel
+                {
+                    BrushValue = Brushes.Blue,
+                    Title = "Blue",
+                },
+            };
+            SelectedTextFill = TextFillList.First();
+
             CreateImageCommand = new RelayCommand(_ => RunCreateImage());
             OpenImageDirectoryCommand = new RelayCommand(_ => RunOpenImageDirectory());
         }
@@ -66,19 +135,20 @@ namespace ZStickerCreator
 
             // Get the size of canvas
             Size size = new Size(surface.Width, surface.Height);
+
             // Measure and arrange the surface
             // VERY IMPORTANT
             surface.Measure(size);
             surface.Arrange(new Rect(size));
 
-            // Create a render bitmap and push the surface to it
-            RenderTargetBitmap renderBitmap =
+            var renderBitmap =
               new RenderTargetBitmap(
                 (int)size.Width,
                 (int)size.Height,
                 96d,
                 96d,
-                PixelFormats.Pbgra32);
+                PixelFormats.Pbgra32
+            );
             renderBitmap.Render(surface);
 
             using (var file = File.Create(path))
