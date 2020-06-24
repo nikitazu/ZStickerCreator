@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ZStickerCreator.UI.Commands;
+using ZStickerCreator.UI.Controls;
 using ZStickerCreator.UI.Framework;
 using ZStickerCreator.UI.Main;
 
@@ -28,7 +29,6 @@ namespace ZStickerCreator
         // Fields
         //
 
-        private Canvas _previewImage;
         private List<StickerItemViewModel> _stickerItems;
         private StickerItemViewModel _selectedStickerItem;
         private List<BrushViewModel> _textFillList;
@@ -85,8 +85,6 @@ namespace ZStickerCreator
             {
                 _transparentBackground = value;
                 PropertyChanged?.Invoke(this, PropArgs.TransparentBackground);
-
-                CreateImageCommand.TransparentBackground = value;
             }
         }
 
@@ -95,26 +93,14 @@ namespace ZStickerCreator
 
         public ICommand AddStickerItemCommand { get; }
         public ICommand RemoveStickerItemCommand { get; }
-
-        public CreateImageCommand CreateImageCommand { get; } = new CreateImageCommand
-        {
-            OutputPath = "out.png"
-        };
-
+        public CreateImageCommand CreateImageCommand { get; }
+        public CreateStickerPackCommand CreateStickerPackCommand { get; }
         public ICommand OpenImageDirectoryCommand { get; }
 
         // UI
         //
 
-        public Canvas PreviewImage
-        {
-            get => _previewImage;
-            set
-            {
-                _previewImage = value;
-                CreateImageCommand.Surface = value;
-            }
-        }
+        public PreviewImage PreviewImage { get; set; }
 
         public MainWindowViewModel()
         {
@@ -169,6 +155,8 @@ namespace ZStickerCreator
 
             AddStickerItemCommand = new RelayCommand(_ => RunAddStickerItem());
             RemoveStickerItemCommand = new RelayCommand(_ => RunRemoveStickerItem());
+            CreateImageCommand = new CreateImageCommand(this);
+            CreateStickerPackCommand = new CreateStickerPackCommand(this);
             OpenImageDirectoryCommand = new RelayCommand(_ => RunOpenImageDirectory());
         }
 

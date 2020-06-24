@@ -56,8 +56,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core\ImageProcessing\ImageBuilder.cs" />
     <Compile Include="UI\Commands\CreateImageCommand.cs" />
+    <Compile Include="UI\Commands\CreateStickerPackCommand.cs" />
     <Compile Include="UI\Controls\OutlinedTextBlock.cs" />
+    <Compile Include="UI\Controls\PreviewImage.xaml.cs">
+      <DependentUpon>PreviewImage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Framework\RelayCommand.cs" />
     <Compile Include="UI\Framework\SimpleCommand.cs" />
     <Compile Include="UI\Main\BrushViewModel.cs" />
@@ -74,6 +79,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\Controls\PreviewImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindowViewModel.cs" />

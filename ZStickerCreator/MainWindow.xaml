@@ -127,21 +127,7 @@
             Margin="0,0,0,16"
             HorizontalAlignment="Center"
         >
-            <Canvas Name="PreviewImage" Width="512" Height="512" Background="AliceBlue">
-                <Grid Width="512" Height="512">
-                    <c:OutlinedTextBlock
-                        Text="{Binding SelectedStickerItem.Title}"
-                        FontFamily="Calibri"
-                        FontSize="48pt"
-                        FontWeight="ExtraBold"
-                        TextWrapping="Wrap"
-                        StrokeThickness="2"
-                        Stroke="DarkBlue"
-                        Fill="{Binding SelectedTextFill.BrushValue}"
-                        HorizontalAlignment="Center"
-                    />
-                </Grid>
-            </Canvas>
+            <c:PreviewImage x:Name="PreviewImage" />
         </StackPanel>
 
         <!-- Commands -->
@@ -154,6 +140,7 @@
             Orientation="Horizontal"
         >
             <Button Content="Create image" Command="{Binding CreateImageCommand}" Padding="16" MinWidth="128" />
+            <Button Content="Create pack" Command="{Binding CreateStickerPackCommand}" Padding="16" MinWidth="128" />
             <Button Content="Open directory" Command="{Binding OpenImageDirectoryCommand}" Padding="16" MinWidth="128" />
         </StackPanel>
     </Grid>

@@ -1,0 +1,29 @@
+﻿<UserControl
+    x:Class="ZStickerCreator.UI.Controls.PreviewImage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:c="clr-namespace:ZStickerCreator.UI.Controls"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+>
+    <Grid>
+        <Canvas Name="ImageCanvas" Width="512" Height="512" Background="AliceBlue">
+            <Grid Width="512" Height="512">
+                <c:OutlinedTextBlock
+                    Text="{Binding SelectedStickerItem.Title}"
+                    FontFamily="Calibri"
+                    FontSize="48pt"
+                    FontWeight="ExtraBold"
+                    TextWrapping="Wrap"
+                    StrokeThickness="2"
+                    Stroke="DarkBlue"
+                    Fill="{Binding SelectedTextFill.BrushValue}"
+                    HorizontalAlignment="Center"
+                />
+            </Grid>
+        </Canvas>
+    </Grid>
+</UserControl>
