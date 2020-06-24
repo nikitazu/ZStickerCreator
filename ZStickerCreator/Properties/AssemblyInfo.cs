@@ -10,10 +10,10 @@ using System.Windows;
 [assembly: AssemblyTitle("ZStickerCreator")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("nikitazu")]
 [assembly: AssemblyProduct("ZStickerCreator")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © nikitazu 2020")]
+[assembly: AssemblyTrademark("nikitazu")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
