@@ -176,6 +176,7 @@ namespace ZStickerCreator
             StickerItems = StickerItems.Concat(new StickerItemViewModel[] {
                 new StickerItemViewModel
                 {
+                    Emoji = $"sticker_{StickerItems.Count}",
                     Title = "Да Пошли Вы Все!",
                 }
             }).ToList();
