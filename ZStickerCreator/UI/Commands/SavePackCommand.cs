@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Windows.Input;
-using System.Xml.Linq;
+using ZStickerCreator.Core.Persist;
 using ZStickerCreator.UI.Framework;
 using ZStickerCreator.UI.Main;
 
@@ -10,32 +11,27 @@ namespace ZStickerCreator.UI.Commands
     {
         private const string OutputPath = "pack.xml";
 
-        private readonly MainWindowViewModel _main;
+        private readonly XmlDataPersister _persister;
 
-        public SavePackCommand(MainWindowViewModel main)
+        public SavePackCommand(XmlDataPersister persister)
         {
-            _main = main;
+            _persister = persister;
         }
 
         protected override void OnExecute(object param)
         {
-            var xdoc = new XDocument(
-                new XElement(
-                    "Pack",
-                    new XElement(
-                        "Stickers",
-                        _main.StickerItems.Select(StickerToXml)
-                    )
-                )
-            );
-            xdoc.Save(OutputPath);
+            var main = (MainWindowViewModel)param;
+            using (var file = File.Create(OutputPath))
+            {
+                _persister.Save(main.StickerItems.Select(StickerToXml), file);
+            }
         }
 
-        private XElement StickerToXml(StickerItemViewModel sticker) =>
-            new XElement(
-                "Sticker",
-                new XElement("Emoji", sticker.Emoji),
-                new XElement("Title", sticker.Title)
-            );
+        private XmlDataPersister.StickerData StickerToXml(StickerItemViewModel sticker) =>
+            new XmlDataPersister.StickerData()
+            {
+                Emoji = sticker.Emoji,
+                Title = sticker.Title,
+            };
     }
 }

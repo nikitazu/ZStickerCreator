@@ -12,7 +12,7 @@
     Title="ZStickerCreator"
     DataContextChanged="Window_DataContextChanged"
 >
-    <Grid Margin="16">
+    <Grid Margin="16" IsEnabled="{Binding IsEnabled}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -154,8 +154,8 @@
             <Button Content="Create image" Command="{Binding CreateImageCommand}" Padding="16" MinWidth="128" />
             <Button Content="Create pack" Command="{Binding CreateStickerPackCommand}" Padding="16" MinWidth="128" />
             <Button Content="Open directory" Command="{Binding OpenImageDirectoryCommand}" Padding="16" MinWidth="128" />
-            <Button Content="Save pack" Command="{Binding SavePackCommand}" Padding="16" MinWidth="128" />
-            <Button Content="Load pack" Command="{Binding LoadPackCommand}" Padding="16" MinWidth="128" />
+            <Button Content="Save pack" Command="{Binding SavePackCommand}" CommandParameter="{Binding .}" Padding="16" MinWidth="128" />
+            <Button Content="Load pack" Command="{Binding LoadPackCommand}" CommandParameter="{Binding .}" Padding="16" MinWidth="128" />
         </StackPanel>
     </Grid>
 </Window>

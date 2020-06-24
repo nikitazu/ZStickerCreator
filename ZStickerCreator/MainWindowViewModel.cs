@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Controls;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using ZStickerCreator.UI.Commands;
 using ZStickerCreator.UI.Controls;
 using ZStickerCreator.UI.Framework;
@@ -19,6 +21,7 @@ namespace ZStickerCreator
 
         private static class PropArgs
         {
+            public static readonly PropertyChangedEventArgs IsEnabled = new PropertyChangedEventArgs(nameof(IsEnabled));
             public static readonly PropertyChangedEventArgs StickerItems = new PropertyChangedEventArgs(nameof(StickerItems));
             public static readonly PropertyChangedEventArgs SelectedStickerItem = new PropertyChangedEventArgs(nameof(SelectedStickerItem));
             public static readonly PropertyChangedEventArgs TextFillList = new PropertyChangedEventArgs(nameof(TextFillList));
@@ -29,6 +32,7 @@ namespace ZStickerCreator
         // Fields
         //
 
+        private bool _isEnabled;
         private List<StickerItemViewModel> _stickerItems;
         private StickerItemViewModel _selectedStickerItem;
         private List<BrushViewModel> _textFillList;
@@ -37,6 +41,16 @@ namespace ZStickerCreator
 
         // Properties
         //
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                _isEnabled = value;
+                PropertyChanged?.Invoke(this, PropArgs.IsEnabled);
+            }
+        }
 
         public List<StickerItemViewModel> StickerItems
         {
@@ -104,8 +118,13 @@ namespace ZStickerCreator
 
         public PreviewImage PreviewImage { get; set; }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(
+            LoadPackCommand loadPackCommand,
+            SavePackCommand savePackCommand,
+            Func<List<StickerItemViewModel>> getExampleData
+        )
         {
+            IsEnabled = false;
             string[] emoji = new string[]
             {
                 "grinning", "smiley", "smile", "grin", "satisfied", "laughing", "sweat_smile", "joy",
@@ -167,8 +186,21 @@ namespace ZStickerCreator
             CreateImageCommand = new CreateImageCommand(this);
             CreateStickerPackCommand = new CreateStickerPackCommand(this);
             OpenImageDirectoryCommand = new RelayCommand(_ => RunOpenImageDirectory());
-            SavePackCommand = new SavePackCommand(this);
-            LoadPackCommand = new LoadPackCommand(this);
+            SavePackCommand = savePackCommand;
+            LoadPackCommand = loadPackCommand;
+
+            // Async load state
+
+            var currentDispatcher = Dispatcher.CurrentDispatcher;
+            Task.Run(() =>
+            {
+                var data = getExampleData();
+                currentDispatcher.Invoke(() =>
+                {
+                    StickerItems = data;
+                    IsEnabled = true;
+                });
+            });
         }
 
         private void RunAddStickerItem()

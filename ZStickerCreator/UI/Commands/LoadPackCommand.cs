@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Windows.Input;
-using System.Xml.Linq;
+using ZStickerCreator.Core.Persist;
 using ZStickerCreator.UI.Framework;
 
 namespace ZStickerCreator.UI.Commands
@@ -9,29 +10,28 @@ namespace ZStickerCreator.UI.Commands
     {
         private const string InputPath = "pack.xml";
 
-        private readonly MainWindowViewModel _main;
+        private readonly XmlDataPersister _persister;
 
-        public LoadPackCommand(MainWindowViewModel main)
+        public LoadPackCommand(XmlDataPersister persister)
         {
-            _main = main;
+            _persister = persister;
         }
 
         protected override void OnExecute(object param)
         {
-            var xdoc = XDocument.Load(InputPath);
-            _main.StickerItems = xdoc.Root
-                .Element("Stickers")
-                .Elements("Sticker")
-                .Select(StickerFromXml)
-                .ToList();
-            _main.SelectedStickerItem = _main.StickerItems.First();
+            var main = (MainWindowViewModel)param;
+            using (var file = File.OpenRead(InputPath))
+            {
+                main.StickerItems = _persister.Load(file).Select(StickerFromData).ToList();
+                main.SelectedStickerItem = main.StickerItems.FirstOrDefault();
+            }
         }
 
-        private Main.StickerItemViewModel StickerFromXml(XElement xml) =>
+        private Main.StickerItemViewModel StickerFromData(XmlDataPersister.StickerData data) =>
             new Main.StickerItemViewModel
             {
-                Emoji = xml.Element("Emoji").Value,
-                Title = xml.Element("Title").Value
+                Emoji = data.Emoji,
+                Title = data.Title,
             };
     }
 }
