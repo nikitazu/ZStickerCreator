@@ -18,7 +18,8 @@ namespace ZStickerCreator
 
         private static class PropArgs
         {
-            public static readonly PropertyChangedEventArgs Text = new PropertyChangedEventArgs(nameof(Text));
+            public static readonly PropertyChangedEventArgs StickerItems = new PropertyChangedEventArgs(nameof(StickerItems));
+            public static readonly PropertyChangedEventArgs SelectedStickerItem = new PropertyChangedEventArgs(nameof(SelectedStickerItem));
             public static readonly PropertyChangedEventArgs TextFillList = new PropertyChangedEventArgs(nameof(TextFillList));
             public static readonly PropertyChangedEventArgs SelectedTextFill = new PropertyChangedEventArgs(nameof(SelectedTextFill));
             public static readonly PropertyChangedEventArgs TransparentBackground = new PropertyChangedEventArgs(nameof(TransparentBackground));
@@ -28,7 +29,8 @@ namespace ZStickerCreator
         //
 
         private Canvas _previewImage;
-        private string _text;
+        private List<StickerItemViewModel> _stickerItems;
+        private StickerItemViewModel _selectedStickerItem;
         private List<BrushViewModel> _textFillList;
         private BrushViewModel _selectedTextFill;
         private bool _transparentBackground;
@@ -36,13 +38,23 @@ namespace ZStickerCreator
         // Properties
         //
 
-        public string Text
+        public List<StickerItemViewModel> StickerItems
         {
-            get => _text;
+            get => _stickerItems;
             set
             {
-                _text = value;
-                PropertyChanged?.Invoke(this, PropArgs.Text);
+                _stickerItems = value;
+                PropertyChanged?.Invoke(this, PropArgs.StickerItems);
+            }
+        }
+
+        public StickerItemViewModel SelectedStickerItem
+        {
+            get => _selectedStickerItem;
+            set
+            {
+                _selectedStickerItem = value;
+                PropertyChanged?.Invoke(this, PropArgs.SelectedStickerItem);
             }
         }
 
@@ -81,6 +93,9 @@ namespace ZStickerCreator
         // Commands
         //
 
+        public ICommand AddStickerItemCommand { get; }
+        public ICommand RemoveStickerItemCommand { get; }
+
         public CreateImageCommand CreateImageCommand { get; } = new CreateImageCommand
         {
             OutputPath = "out.png"
@@ -103,7 +118,14 @@ namespace ZStickerCreator
 
         public MainWindowViewModel()
         {
-            Text = "Всё Ацтой!";
+            StickerItems = new List<StickerItemViewModel>()
+            {
+                new StickerItemViewModel
+                {
+                    Title = "Всё Ацтой!",
+                },
+            };
+            SelectedStickerItem = StickerItems.First();
             TextFillList = new List<BrushViewModel>
             {
                 new BrushViewModel
@@ -145,7 +167,24 @@ namespace ZStickerCreator
             SelectedTextFill = TextFillList.First();
             TransparentBackground = true;
 
+            AddStickerItemCommand = new RelayCommand(_ => RunAddStickerItem());
+            RemoveStickerItemCommand = new RelayCommand(_ => RunRemoveStickerItem());
             OpenImageDirectoryCommand = new RelayCommand(_ => RunOpenImageDirectory());
+        }
+
+        private void RunAddStickerItem()
+        {
+            StickerItems = StickerItems.Concat(new StickerItemViewModel[] {
+                new StickerItemViewModel
+                {
+                    Title = "Да Пошли Вы Все!",
+                }
+            }).ToList();
+        }
+
+        private void RunRemoveStickerItem()
+        {
+            StickerItems = StickerItems.Where(x => x != SelectedStickerItem).ToList();
         }
 
         private void RunOpenImageDirectory()

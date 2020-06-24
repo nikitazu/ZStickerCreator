@@ -61,6 +61,7 @@
     <Compile Include="UI\Framework\RelayCommand.cs" />
     <Compile Include="UI\Framework\SimpleCommand.cs" />
     <Compile Include="UI\Main\BrushViewModel.cs" />
+    <Compile Include="UI\Main\StickerItemViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
