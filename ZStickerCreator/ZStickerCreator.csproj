@@ -56,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UI\Commands\CreateImageCommand.cs" />
     <Compile Include="UI\Controls\OutlinedTextBlock.cs" />
     <Compile Include="UI\Framework\RelayCommand.cs" />
     <Compile Include="UI\Framework\SimpleCommand.cs" />

@@ -3,12 +3,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using ZStickerCreator.UI.Commands;
 using ZStickerCreator.UI.Framework;
 using ZStickerCreator.UI.Main;
 
@@ -29,6 +27,7 @@ namespace ZStickerCreator
         // Fields
         //
 
+        private Canvas _previewImage;
         private string _text;
         private List<BrushViewModel> _textFillList;
         private BrushViewModel _selectedTextFill;
@@ -74,19 +73,33 @@ namespace ZStickerCreator
             {
                 _transparentBackground = value;
                 PropertyChanged?.Invoke(this, PropArgs.TransparentBackground);
+
+                CreateImageCommand.TransparentBackground = value;
             }
         }
 
         // Commands
         //
 
-        public ICommand CreateImageCommand { get; }
+        public CreateImageCommand CreateImageCommand { get; } = new CreateImageCommand
+        {
+            OutputPath = "out.png"
+        };
+
         public ICommand OpenImageDirectoryCommand { get; }
 
         // UI
         //
 
-        public Canvas PreviewImage { get; set; }
+        public Canvas PreviewImage
+        {
+            get => _previewImage;
+            set
+            {
+                _previewImage = value;
+                CreateImageCommand.Surface = value;
+            }
+        }
 
         public MainWindowViewModel()
         {
@@ -132,58 +145,7 @@ namespace ZStickerCreator
             SelectedTextFill = TextFillList.First();
             TransparentBackground = true;
 
-            CreateImageCommand = new RelayCommand(_ => RunCreateImage());
             OpenImageDirectoryCommand = new RelayCommand(_ => RunOpenImageDirectory());
-        }
-
-        private void RunCreateImage()
-        {
-            var surface = PreviewImage;
-            var path = "out.png";
-
-            // Save current canvas transform
-            Transform transform = surface.LayoutTransform;
-            // reset current transform (in case it is scaled or rotated)
-            surface.LayoutTransform = null;
-
-            var surfaceBackground = surface.Background;
-            if (TransparentBackground)
-            {
-                surface.Background = Brushes.Transparent;
-            }
-
-            // Get the size of canvas
-            Size size = new Size(surface.Width, surface.Height);
-
-            // Measure and arrange the surface
-            // VERY IMPORTANT
-            surface.Measure(size);
-            surface.Arrange(new Rect(size));
-
-            var renderBitmap =
-              new RenderTargetBitmap(
-                (int)size.Width,
-                (int)size.Height,
-                96d,
-                96d,
-                PixelFormats.Pbgra32
-            );
-            renderBitmap.Render(surface);
-
-            using (var file = File.Create(path))
-            {
-                PngBitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-                encoder.Save(file);
-            }
-
-            if (TransparentBackground)
-            {
-                surface.Background = surfaceBackground;
-            }
-
-            // Restore previously saved layout
-            surface.LayoutTransform = transform;
         }
 
         private void RunOpenImageDirectory()
