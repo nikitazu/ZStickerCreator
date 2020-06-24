@@ -23,6 +23,7 @@ namespace ZStickerCreator
             public static readonly PropertyChangedEventArgs Text = new PropertyChangedEventArgs(nameof(Text));
             public static readonly PropertyChangedEventArgs TextFillList = new PropertyChangedEventArgs(nameof(TextFillList));
             public static readonly PropertyChangedEventArgs SelectedTextFill = new PropertyChangedEventArgs(nameof(SelectedTextFill));
+            public static readonly PropertyChangedEventArgs TransparentBackground = new PropertyChangedEventArgs(nameof(TransparentBackground));
         }
 
         // Fields
@@ -31,6 +32,7 @@ namespace ZStickerCreator
         private string _text;
         private List<BrushViewModel> _textFillList;
         private BrushViewModel _selectedTextFill;
+        private bool _transparentBackground;
 
         // Properties
         //
@@ -62,6 +64,16 @@ namespace ZStickerCreator
             {
                 _selectedTextFill = value;
                 PropertyChanged?.Invoke(this, PropArgs.SelectedTextFill);
+            }
+        }
+
+        public bool TransparentBackground
+        {
+            get => _transparentBackground;
+            set
+            {
+                _transparentBackground = value;
+                PropertyChanged?.Invoke(this, PropArgs.TransparentBackground);
             }
         }
 
@@ -118,6 +130,7 @@ namespace ZStickerCreator
                 },
             };
             SelectedTextFill = TextFillList.First();
+            TransparentBackground = true;
 
             CreateImageCommand = new RelayCommand(_ => RunCreateImage());
             OpenImageDirectoryCommand = new RelayCommand(_ => RunOpenImageDirectory());
@@ -132,6 +145,12 @@ namespace ZStickerCreator
             Transform transform = surface.LayoutTransform;
             // reset current transform (in case it is scaled or rotated)
             surface.LayoutTransform = null;
+
+            var surfaceBackground = surface.Background;
+            if (TransparentBackground)
+            {
+                surface.Background = Brushes.Transparent;
+            }
 
             // Get the size of canvas
             Size size = new Size(surface.Width, surface.Height);
@@ -156,6 +175,11 @@ namespace ZStickerCreator
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
                 encoder.Save(file);
+            }
+
+            if (TransparentBackground)
+            {
+                surface.Background = surfaceBackground;
             }
 
             // Restore previously saved layout
