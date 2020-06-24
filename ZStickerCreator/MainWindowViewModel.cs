@@ -96,6 +96,8 @@ namespace ZStickerCreator
         public CreateImageCommand CreateImageCommand { get; }
         public CreateStickerPackCommand CreateStickerPackCommand { get; }
         public ICommand OpenImageDirectoryCommand { get; }
+        public SavePackCommand SavePackCommand { get; }
+        public LoadPackCommand LoadPackCommand { get; }
 
         // UI
         //
@@ -153,11 +155,16 @@ namespace ZStickerCreator
             SelectedTextFill = TextFillList.First();
             TransparentBackground = true;
 
+            // All state MUST be initialized before this point
+            // It's fine to leak `this` starting from here
+
             AddStickerItemCommand = new RelayCommand(_ => RunAddStickerItem());
             RemoveStickerItemCommand = new RelayCommand(_ => RunRemoveStickerItem());
             CreateImageCommand = new CreateImageCommand(this);
             CreateStickerPackCommand = new CreateStickerPackCommand(this);
             OpenImageDirectoryCommand = new RelayCommand(_ => RunOpenImageDirectory());
+            SavePackCommand = new SavePackCommand(this);
+            LoadPackCommand = new LoadPackCommand(this);
         }
 
         private void RunAddStickerItem()

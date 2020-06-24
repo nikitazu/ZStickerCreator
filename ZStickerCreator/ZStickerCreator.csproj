@@ -59,6 +59,8 @@
     <Compile Include="Core\ImageProcessing\ImageBuilder.cs" />
     <Compile Include="UI\Commands\CreateImageCommand.cs" />
     <Compile Include="UI\Commands\CreateStickerPackCommand.cs" />
+    <Compile Include="UI\Commands\LoadPackCommand.cs" />
+    <Compile Include="UI\Commands\SavePackCommand.cs" />
     <Compile Include="UI\Controls\OutlinedTextBlock.cs" />
     <Compile Include="UI\Controls\PreviewImage.xaml.cs">
       <DependentUpon>PreviewImage.xaml</DependentUpon>
