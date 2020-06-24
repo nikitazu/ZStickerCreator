@@ -7,7 +7,7 @@
     xmlns:c="clr-namespace:ZStickerCreator.UI.Controls"
     mc:Ignorable="d"
     Width="1024"
-    Height="768"
+    Height="968"
     WindowStartupLocation="CenterScreen"
     Title="ZStickerCreator"
     DataContextChanged="Window_DataContextChanged"
@@ -45,7 +45,7 @@
             >
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Title}" />
+                        <TextBlock Text="{Binding Emoji}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -65,16 +65,28 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Text="{Binding SelectedStickerItem.Emoji}"
+                HorizontalAlignment="Center"
+                FontSize="24"
+                Margin="8"
+            />
 
             <!-- Text -->
             <Label
-                Grid.Row="0"
+                Grid.Row="1"
                 Grid.Column="0"
                 Content="Text"
             />
             <TextBox
-                Grid.Row="0"
+                Grid.Row="1"
                 Grid.Column="1"
                 Text="{Binding SelectedStickerItem.Title, UpdateSourceTrigger=PropertyChanged}"
                 AcceptsReturn="True"
@@ -82,12 +94,12 @@
 
             <!-- Fill Color -->
             <Label
-                Grid.Row="1"
+                Grid.Row="2"
                 Grid.Column="0"
                 Content="Fill color"
             />
             <ComboBox
-                Grid.Row="1"
+                Grid.Row="2"
                 Grid.Column="1"
                 ItemsSource="{Binding TextFillList}"
                 SelectedItem="{Binding SelectedTextFill}"
@@ -108,12 +120,12 @@
 
             <!-- Transparent Background-->
             <Label
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.Column="0"
                 Content="Transparent background"
             />
             <CheckBox
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.Column="1"
                 IsChecked="{Binding TransparentBackground}"
                 Content="Enabled"

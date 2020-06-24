@@ -22,11 +22,16 @@ namespace ZStickerCreator.UI.Commands
             _main.StickerItems = xdoc.Root
                 .Element("Stickers")
                 .Elements("Sticker")
-                .Select(xsticker => new Main.StickerItemViewModel
-                {
-                    Title = xsticker.Value
-                })
+                .Select(StickerFromXml)
                 .ToList();
+            _main.SelectedStickerItem = _main.StickerItems.First();
         }
+
+        private Main.StickerItemViewModel StickerFromXml(XElement xml) =>
+            new Main.StickerItemViewModel
+            {
+                Emoji = xml.Element("Emoji").Value,
+                Title = xml.Element("Title").Value
+            };
     }
 }

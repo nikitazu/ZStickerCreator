@@ -106,13 +106,17 @@ namespace ZStickerCreator
 
         public MainWindowViewModel()
         {
-            StickerItems = new List<StickerItemViewModel>()
+            string[] emoji = new string[]
             {
-                new StickerItemViewModel
-                {
-                    Title = "Всё Ацтой!",
-                },
+                "grinning", "smiley", "smile", "grin", "satisfied", "laughing", "sweat_smile", "joy",
             };
+            StickerItems = emoji
+                .Select(emo => new StickerItemViewModel
+                {
+                    Emoji = emo,
+                    Title = "Фпеши Свой Ацтой!"
+                })
+                .ToList();
             SelectedStickerItem = StickerItems.First();
             TextFillList = new List<BrushViewModel>
             {

@@ -35,8 +35,12 @@ namespace ZStickerCreator.UI.Commands
             {
                 var item = _main.StickerItems[i];
 
-                var outName = item.Title;
+                var outName = item.Emoji;
                 foreach (var c in Path.GetInvalidPathChars())
+                {
+                    outName = outName.Replace(c.ToString(), "");
+                }
+                foreach (var c in Path.GetInvalidFileNameChars())
                 {
                     outName = outName.Replace(c.ToString(), "");
                 }
