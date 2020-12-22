@@ -20,7 +20,7 @@ Stickers
 - Доколе
   Картина с хватающимися за голову человеком
   https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/The_Scream.jpg/300px-The_Scream.jpg
-- ?????????
+- бАжественно!
 - Бандлы не сбилдились
 - Бандлы хуяндлы!
   Кейдж
