@@ -18,6 +18,7 @@ namespace ZStickerCreator.Core.Persist
         {
             public string Emoji { get; set; }
             public string Title { get; set; }
+            public string MemePictureUrl { get; set; }
         }
 
         public void Save(IEnumerable<StickerData> items, Stream output)
@@ -51,14 +52,16 @@ namespace ZStickerCreator.Core.Persist
             new XElement(
                 "Sticker",
                 new XElement("Emoji", sticker.Emoji),
-                new XElement("Title", sticker.Title)
+                new XElement("Title", sticker.Title),
+                new XElement("MemePictureUrl", sticker.MemePictureUrl)
             );
 
         private StickerData StickerFromXml(XElement xml) =>
             new StickerData
             {
                 Emoji = xml.Element("Emoji").Value,
-                Title = xml.Element("Title").Value
+                Title = xml.Element("Title").Value,
+                MemePictureUrl = xml.Element("MemePictureUrl")?.Value ?? string.Empty
             };
     }
 }

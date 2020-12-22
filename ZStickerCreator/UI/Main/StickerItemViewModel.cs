@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Media.Imaging;
 
 namespace ZStickerCreator.UI.Main
 {
@@ -10,6 +12,8 @@ namespace ZStickerCreator.UI.Main
         {
             public static readonly PropertyChangedEventArgs Emoji = new PropertyChangedEventArgs(nameof(Emoji));
             public static readonly PropertyChangedEventArgs Title = new PropertyChangedEventArgs(nameof(Title));
+            public static readonly PropertyChangedEventArgs MemePictureUrl = new PropertyChangedEventArgs(nameof(MemePictureUrl));
+            public static readonly PropertyChangedEventArgs MemePicture = new PropertyChangedEventArgs(nameof(MemePicture));
         }
 
         // Fields
@@ -17,6 +21,8 @@ namespace ZStickerCreator.UI.Main
 
         private string _emoji;
         private string _title;
+        private string _memePictureUrl;
+        private BitmapImage _memePicture;
 
 
         // Properties
@@ -39,6 +45,39 @@ namespace ZStickerCreator.UI.Main
             {
                 _title = value;
                 PropertyChanged?.Invoke(this, PropArgs.Title);
+            }
+        }
+
+        public string MemePictureUrl
+        {
+            get => _memePictureUrl;
+            set
+            {
+                _memePictureUrl = value;
+                PropertyChanged?.Invoke(this, PropArgs.MemePictureUrl);
+                OnMemePictureUrlUpdated();
+            }
+        }
+
+        public BitmapImage MemePicture
+        {
+            get => _memePicture;
+            set
+            {
+                _memePicture = value;
+                PropertyChanged?.Invoke(this, PropArgs.MemePicture);
+            }
+        }
+
+        private void OnMemePictureUrlUpdated()
+        {
+            if (Uri.TryCreate(MemePictureUrl, UriKind.Absolute, out var memePictureUri))
+            {
+                MemePicture = new BitmapImage(memePictureUri);
+            }
+            else
+            {
+                MemePicture = null;
             }
         }
     }

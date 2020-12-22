@@ -32,6 +32,7 @@ namespace ZStickerCreator.UI.Commands
             {
                 Emoji = sticker.Emoji,
                 Title = sticker.Title,
+                MemePictureUrl = sticker.MemePictureUrl,
             };
     }
 }

@@ -12,6 +12,7 @@
     <Grid>
         <Canvas Name="ImageCanvas" Width="512" Height="512" Background="AliceBlue">
             <Grid Width="512" Height="512">
+                <Image Source="{Binding SelectedStickerItem.MemePicture}" />
                 <c:OutlinedTextBlock
                     Text="{Binding SelectedStickerItem.Title}"
                     FontFamily="Calibri"

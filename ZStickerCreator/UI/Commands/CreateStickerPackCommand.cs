@@ -29,7 +29,7 @@ namespace ZStickerCreator.UI.Commands
 
             Directory.CreateDirectory(OutputDir);
 
-            var ib = new ImageBuilder();
+            var builder = new ImageBuilder();
 
             for (int i = 0; i < _main.StickerItems.Count; i++)
             {
@@ -47,8 +47,8 @@ namespace ZStickerCreator.UI.Commands
                 outName = outName.Replace(" ", "_");
 
                 var path = Path.Combine(OutputDir, $"{i}_{outName}.png");
-                var xxx = new PreviewImage();
-                xxx.DataContext = new
+                var preview = new PreviewImage();
+                preview.DataContext = new
                 {
                     SelectedStickerItem = item,
                     SelectedTextFill = _main.SelectedTextFill,
@@ -58,9 +58,9 @@ namespace ZStickerCreator.UI.Commands
                     DispatcherPriority.Background,
                     new Action(() =>
                     {
-                        ib.BuildImageFile(new ImageBuilder.Settings
+                        builder.BuildImageFile(new ImageBuilder.Settings
                         {
-                            Surface = xxx.ImageCanvas,
+                            Surface = preview.ImageCanvas,
                             OutputPath = path,
                             TransparentBackground = _main.TransparentBackground,
                         });

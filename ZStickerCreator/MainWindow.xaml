@@ -66,6 +66,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!-- Header -->
@@ -129,6 +130,18 @@
                 Grid.Column="1"
                 IsChecked="{Binding TransparentBackground}"
                 Content="Enabled"
+            />
+
+            <!-- Picture-->
+            <Label
+                Grid.Row="4"
+                Grid.Column="0"
+                Content="Meme picture"
+            />
+            <TextBox
+                Grid.Row="4"
+                Grid.Column="1"
+                Text="{Binding SelectedStickerItem.MemePictureUrl, UpdateSourceTrigger=PropertyChanged}"
             />
         </Grid>
 
